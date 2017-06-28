@@ -30,9 +30,12 @@ Create one R script called ```run_analysis.R``` that does the following:
 1. This script
 
 	a) is supposed to be launched from the working directory;
+	
 	b) uses ```data.table``` and ```reshapre2``` libraries, which will be installed automatically.
+	
 	c) will download and unzip the file "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 	   if the working directory will not contain the "UCI HAR Dataset" folder which with the raw data;
+	   
 	d) contains following two functions:
 		 - ```loadDataTable(fileNameTemplate, setID, colLabels)```
 	     - ```loadDataSet(setID)``` 
@@ -49,8 +52,11 @@ Arguments:
 Implementation details:
 
 a) fnTemplate contains the "setID" fragment(s), which will be substituted by value of the input variable setID
+
 b) fileName constructed in (a) is used as an input parameter of the read.table(fileName)
+
 c) colLabels are assigned as a column names of the constructed table.
+
 	
 3. The function ```loadDataSet(setID)``` creates the tidy data set by loading, transforming and combining corresponding data tables (subject_IDs, activity_IDs, measurements)
 
@@ -59,7 +65,7 @@ Argument:
 - setID: a string, which is used in the template to construct a real name of the file to be loaded;
 
 
-   Variable from the Global Environment used:
+This function uses following variable from the Global Environment:
    
 	 - Person_ID_label:	   string 
 	 - Activity_ID_label:  string 
@@ -67,27 +73,42 @@ Argument:
      - features:           vector of strings
      - extracted_features: vector of logical values (i-th coordinate is TRUE, if it corresponds to measurements on the mean OR standard deviation)
 
+
 Implementation details:
 
 a) the local variables Person_IDs, y, X, which represent the person's IDs, activity IDs and the measurements, respectively, are constructed by calling the function loadDataTable with corresponding parameters first.
-	   After such calls
-	     - vector of activity indexes y is converted into vector of corresponding activity names.
-		 - we use the extracted_features vector to construct X only from specific columns of the table.
+
+After such calls
+
+   - vector of activity indexes y is converted into vector of corresponding activity names.
+   
+   - we use the extracted_features vector to construct X only from specific columns of the table.
+   
 b) tidy data set is constructed by combining the columns of three tables:
 	      ```cbind(Person_IDs, y, X)```
 
 4. 	Main Program:
-    a) loads string vectors features,  activity_labels by reading the information from corresponding files. Besides that 
+
+    a) loads string vectors features,  activity_labels by reading the information from corresponding files. Besides that
+    
 	   - we remove "()" from all elements of the feature vector.
-	   - we will use only 2-nd column of the data set (which corresponds to activity_labels.txt file) AND we convert all activity names into low characters.
+	   
+	   - we will use only 2-nd column of the data set (which corresponds to activity_labels.txt file) AND we convert all activity names into
+low characters.
+
 	b) by searching for "mean" OR "std" in the elements of the features vector, we construct the logical vector 
 	      ```extracted_features <- grepl("(mean|std)", features, ignore.case=TRUE)```
+	      
     c) the variables Person_ID_label and Activity_ID_label are defined as "Person_ID" and "Activity_Name", respectively.
+    
 	d) the loading of the test and train data is performed by
-	       test_data  <- loadDataSet("test")
-           train_data <- loadDataSet("train")
+	       ```test_data  <- loadDataSet("test")```
+           ```train_data <- loadDataSet("train")```
+           
 	e) by merging the test and train data, we construct
         ```tidy_data <- rbind(test_data, train_data)```
+        
     f) by using the melt/dcast functions from "reshape2" library, we calculate data set tidy_data_mean, which contains the average of each variable for each activity and each subject.
+    
     g) tidy_data and tidy_data_mean data sets are written into corresponding text files.	
     
