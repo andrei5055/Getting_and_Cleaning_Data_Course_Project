@@ -86,4 +86,4 @@ melt_data <- melt(tidy_data, id = id_labels, measure.vars = setdiff(names(tidy_d
 # Calculate the average of each variable for each activity for each person
 tidy_data_mean <- dcast(melt_data, Person_ID + Activity_Name ~ variable, mean)
 
-write.table(tidy_data_mean, file = "tidy_data_mean.txt", quote = FALSE)
+write.table(tidy_data_mean, file = "tidy_data_mean.txt", row.names = FALSE, quote = FALSE)
