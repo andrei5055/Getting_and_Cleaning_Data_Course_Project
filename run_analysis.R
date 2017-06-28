@@ -57,7 +57,7 @@ setwd(DataSet)
 features <- read.table("features.txt")[,2]
 
 # Extraction of the flags for the mean and standard deviation for each measurement
-extracted_features <- grepl("(mean|std)", features, ignore.case=TRUE)
+extracted_features <- grepl("mean\\(|std\\(", features, ignore.case=TRUE)
 
 # Remove "()" from the column names
 features <- gsub("\\(\\)", "", features)
